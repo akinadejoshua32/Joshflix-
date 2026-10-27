@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JoshFlix</title>
+<style>
+:root{color-scheme:dark;--red:#e50914;--bg:#101010;--panel:#1c1c1c;--muted:#aaa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:white;font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#111f;backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:15px 5%;gap:12px}
+.logo{color:var(--red);font-size:27px;font-weight:900;letter-spacing:1px}
+button{cursor:pointer;border:0;border-radius:6px;padding:10px 14px;font-weight:bold}
+.red{background:var(--red);color:white}
+.ghost{background:#333;color:white}
+.search{background:#292929;border:1px solid #444;color:white;border-radius:7px;padding:12px;width:min(45vw,320px)}
+.hero{padding:65px 6% 55px;background:linear-gradient(90deg,#000e,#0005),linear-gradient(0deg,#101010,transparent),url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80') center/cover;min-height:310px;display:flex;flex-direction:column;justify-content:center}
+.hero h1{font-size:clamp(34px,7vw,60px);margin:0 0 12px}
+.hero p{max-width:480px;color:#ddd;line-height:1.5}
+main{padding:20px 5% 50px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:15px;margin-top:18px}
+.movie{background:var(--panel);border-radius:9px;overflow:hidden;min-width:0}
+.poster{height:175px;display:grid;place-items:center;text-align:center;padding:15px;background:linear-gradient(145deg,#542323,#171717 65%,#333);font-size:42px}
+.info{padding:12px}
+.info h3{font-size:16px;margin:0 0 7px}
+.info p{font-size:12px;color:var(--muted);line-height:1.45;min-height:34px}
+.info button{width:100%;margin-top:7px}
+.player{margin:20px 0;background:#000;padding:12px;border-radius:10px}
+video{width:100%;max-height:60vh;background:#000}
+.hidden{display:none!important}
+.panel{background:var(--panel);padding:18px;border-radius:10px;margin:18px 0}
+input{max-width:100%}
+.forminput{display:block;width:100%;padding:12px;margin:10px 0;background:#292929;border:1px solid #444;border-radius:6px;color:white}
+footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
+@media(max-width:450px){header{padding:12px 4%;flex-wrap:wrap}.logo{font-size:23px}.search{order:3;width:100%}.hero{min-height:270px;padding:35px 5%}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.poster{height:145px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">JOSHFLIX</div>
+<input id="search" class="search" placeholder="Search movies..." oninput="loadMovies()">
+<button class="ghost" onclick="showAccount()">👤 Account</button>
+</header>
+
+<section class="hero">
+<div style="color:#ff7777;font-weight:bold">YOUR MOVIE WORLD</div>
+<h1>Stories worth watching.</h1>
+<p>Discover animated adventures, explore the catalog, and watch videos right here.</p>
+<div><button class="red" onclick="document.getElementById('catalog').scrollIntoView({behavior:'smooth'})">▶ Explore Movies</button></div>
+</section>
+
+<main>
+<section id="account" class="panel hidden">
+<h2>👤 Your Account</h2>
+<input id="username" class="forminput" placeholder="Username (3+ characters)">
+<input id="password" type="password" class="forminput" placeholder="Password (8+ characters)">
+<button class="red" onclick="register()">Create Account</button>
+<button class="ghost" onclick="login()">Log In</button>
+<p id="accountMessage"></p>
+<p id="loggedIn"></p>
+</section>
+
+<section id="player" class="player hidden">
+<div class="bar"><h2 id="playingTitle">Now Playing</h2><button class="ghost" onclick="closePlayer()">✕ Close</button></div>
+<video id="video" controls playsinline preload="metadata"></video>
+<p id="playingDescription"></p>
+<button id="download" class="red" onclick="downloadMovie()">⬇ Download video</button>
+<p style="color:#aaa;font-size:12px">Downloads depend on the video's permissions and the source server. Some videos open in a new tab instead of saving directly.</p>
+</section>
+
+<section id="catalog">
+<div class="bar"><h2>🎬 Discover Movies</h2><select id="genre" class="search" onchange="loadMovies()"><option value="">All genres</option></select></div>
+<div id="movies" class="grid"></div>
+</section>
+
+<section>
+<div class="bar"><h2>❤️ My List</h2><button class="ghost" onclick="showFavorites()">Show favorites</button></div>
+<div id="favorites" class="grid"></div>
+</section>
+</main>
+<footer>JOSHFLIX · A personal streaming project</footer>
+
+<script>
+let movies=[],token=localStorage.getItem('joshflix_token')||'',favoriteIds=[];
+let currentMovie=null,onlyFavorites=false;
+
+async function api(url,options={}){
+ const headers={...(options.headers||{})};
+ if(token)headers.Authorization='Bearer '+token;
+ if(options.body)headers['Content-Type']='application/json';
+ const r=await fetch(url,{...options,headers});
+ const data=await r.json().catch(()=>({}));
+ if(!r.ok)throw new Error(data.error||'Request failed');
+ return data;
+}
+async function loadMovies(){
+ try{
+  const q=document.getElementById('search').value;
+  const genre=document.getElementById('genre').value;
+  movies=await api('/api/movies?q='+encodeURIComponent(q)+'&genre='+encodeURIComponent(genre));
+  const select=document.getElementById('genre'),old=select.value;
+  const genres=[...new Set(movies.map(m=>m.genre))];
+  if(!select.dataset.ready){
+   select.innerHTML='<option value="">All genres</option>'+genres.map(g=>'<option>'+escapeHTML(g)+'</option>').join('');
+   select.dataset.ready='1';select.value=old;
+  }
+  renderMovies(movies,'movies');
+  renderFavorites();
+ }catch(e){document.getElementById('movies').textContent=e.message}
+}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function card(m){
+ return '<article class="movie"><div class="poster">🎬</div><div class="info"><h3>'+escapeHTML(m.title)+'</h3><div style="color:#aaa;font-size:12px">'+escapeHTML(m.genre)+' · '+m.year+'</div><p>'+escapeHTML(m.description)+'</p><button class="red" onclick="playMovie('+m.id+')">▶ Watch</button><button class="ghost" onclick="toggleFavorite('+m.id+')">❤️ My List</button></div></article>';
+}
+function renderMovies(list,id){document.getElementById(id).innerHTML=list.length?list.map(card).join(''):'<p>No movies found.</p>'}
+function playMovie(id){
+ currentMovie=movies.find(m=>m.id===id)||null;
+ if(!currentMovie){alert('Movie not found.');return}
+ document.getElementById('playingTitle').textContent=currentMovie.title;
+ document.getElementById('playingDescription').textContent=currentMovie.description;
+ const v=document.getElementById('video');v.src=currentMovie.video;
+ document.getElementById('player').classList.remove('hidden');
+ document.getElementById('player').scrollIntoView({behavior:'smooth'});
+ v.play().catch(()=>{});
+}
+function closePlayer(){const v=document.getElementById('video');v.pause();v.removeAttribute('src');v.load();document.getElementById('player').classList.add('hidden')}
+function downloadMovie(){if(currentMovie)location.href='/api/download/'+currentMovie.id}
+function showAccount(){document.getElementById('account').classList.toggle('hidden');document.getElementById('account').scrollIntoView({behavior:'smooth'})}
+async function register(){
+ try{const d=await api('/api/register',{method:'POST',body:JSON.stringify({username:username.value,password:password.value})});accountMessage.textContent=d.message}
+ catch(e){accountMessage.textContent=e.message}
+}
+async function login(){
+ try{
+  const d=await api('/api/login',{method:'POST',body:JSON.stringify({username:username.value,password:password.value})});
+  token=d.token;localStorage.setItem('joshflix_token',token);favoriteIds=d.favorites||[];
+  loggedIn.textContent='Logged in as '+d.username;accountMessage.textContent='Login successful!';renderFavorites();
+ }catch(e){accountMessage.textContent=e.message}
+}
+async function toggleFavorite(id){
+ if(!token){alert('Create an account and log in to save favorites.');showAccount();return}
+ try{const d=await api('/api/favorites/'+id,{method:'POST'});favoriteIds=d.favorites;renderFavorites()}
+ catch(e){alert(e.message)}
+}
+function showFavorites(){renderFavorites();document.getElementById('favorites').scrollIntoView({behavior:'smooth'})}
+function renderFavorites(){renderMovies(movies.filter(m=>favoriteIds.includes(m.id)),'favorites')}
+loadMovies();
+</script>
+</body>
+</html>
