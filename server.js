@@ -94,6 +94,6 @@ app.get('/api/download/:id',(req,res)=>{
 
 app.get('/{*path}', (req,res)=>res.sendFile(path.join(__dirname,'public','index.html')));
 
-app.listen(PORT,'127.0.0.1',()=>{
+app.listen(PORT,'0.0.0.0',()=>{
   console.log(`JoshFlix running at http://127.0.0.1:${PORT}`);
 });
