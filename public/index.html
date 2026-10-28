@@ -122,7 +122,10 @@ async function loadMovies(){
 }
 function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function card(m){
- return '<article class="movie"><div class="poster">🎬</div><div class="info"><h3>'+escapeHTML(m.title)+'</h3><div style="color:#aaa;font-size:12px">'+escapeHTML(m.genre)+' · '+m.year+'</div><p>'+escapeHTML(m.description)+'</p><button class="red" onclick="playMovie('+m.id+')">▶ Watch</button><button class="ghost" onclick="toggleFavorite('+m.id+')">❤️ My List</button></div></article>';
+ const poster = m.poster
+   ? '<img src="'+escapeHTML(m.poster)+'" alt="'+escapeHTML(m.title)+' poster" loading="lazy" onerror="this.outerHTML=\'🎬\'">'
+   : '🎬';
+ return '<article class="movie"><div class="poster">'+poster+'</div><div class="info"><h3>'+escapeHTML(m.title)+'</h3><div style="color:#aaa;font-size:12px">'+escapeHTML(m.genre)+' · '+m.year+'</div><p>'+escapeHTML(m.description)+'</p><button class="red" onclick="playMovie('+m.id+')">▶ Watch</button><button class="ghost" onclick="toggleFavorite('+m.id+')">❤️ My List</button></div></article>';
 }
 function renderMovies(list,id){document.getElementById(id).innerHTML=list.length?list.map(card).join(''):'<p>No movies found.</p>'}
 function playMovie(id){
@@ -160,3 +163,15 @@ loadMovies();
 </script>
 </body>
 </html>
+
+<style>
+.poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.poster {
+  overflow: hidden;
+}
+</style>

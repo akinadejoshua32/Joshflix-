@@ -13,9 +13,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 function loadData() {
   try { return JSON.parse(fs.readFileSync(DATA, 'utf8')); }
   catch { return {users:[], movies:[
-    {id:1,title:'Big Buck Bunny',genre:'Animation',year:2008,description:'A cheerful animated adventure.',video:'https://raw.githubusercontent.com/andreasbotsikas/DemoVideos/master/big_buck_bunny.mp4',download:true},
-    {id:2,title:'Elephants Dream',genre:'Sci-Fi',year:2006,description:'A surreal journey through a strange world.',video:'https://raw.githubusercontent.com/andreasbotsikas/DemoVideos/master/elephants_dream.mp4',download:true},
-    {id:3,title:'Sintel',genre:'Fantasy',year:2010,description:'An epic animated fantasy adventure.',video:'https://media.w3.org/2010/05/sintel/trailer.mp4',download:true}
+    {id:1,title:'Big Buck Bunny',poster:'https://commons.wikimedia.org/wiki/Special:FilePath/Big_buck_bunny_poster_big.jpg',genre:'Animation',year:2008,description:'A cheerful animated adventure.',video:'https://raw.githubusercontent.com/andreasbotsikas/DemoVideos/master/big_buck_bunny.mp4',download:true},
+    {id:2,title:'Elephants Dream',poster:'https://commons.wikimedia.org/wiki/Special:FilePath/ElephantsDreamPoster.jpg',genre:'Sci-Fi',year:2006,description:'A surreal journey through a strange world.',video:'https://raw.githubusercontent.com/andreasbotsikas/DemoVideos/master/elephants_dream.mp4',download:true},
+    {id:3,title:'Sintel',poster:'https://commons.wikimedia.org/wiki/Special:FilePath/Sintel_poster.jpg',genre:'Fantasy',year:2010,description:'An epic animated fantasy adventure.',video:'https://media.w3.org/2010/05/sintel/trailer.mp4',download:true}
   ]}; }
 }
 function saveData(d) { fs.writeFileSync(DATA, JSON.stringify(d,null,2)); }
