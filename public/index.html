@@ -39,7 +39,7 @@ footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
 <body>
 <header>
 <div class="logo">JOSHFLIX</div>
-<input id="search" class="search" placeholder="Search movies..." oninput="loadMovies()">
+<input id="search" class="search" placeholder="Search movies..." oninput="scheduleMovieSearch()">
 <button class="ghost" onclick="showAccount()">👤 Account</button>
 </header>
 
@@ -93,6 +93,11 @@ async function api(url,options={}){
  const data=await r.json().catch(()=>({}));
  if(!r.ok)throw new Error(data.error||'Request failed');
  return data;
+}
+let movieSearchTimer;
+function scheduleMovieSearch(){
+ clearTimeout(movieSearchTimer);
+ movieSearchTimer=setTimeout(loadMovies,250);
 }
 async function loadMovies(){
  try{
