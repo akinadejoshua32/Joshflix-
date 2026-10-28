@@ -15,6 +15,9 @@ function loadData() {
   catch { return {users:[], movies:[
     {id:1,title:'Big Buck Bunny',poster:'https://commons.wikimedia.org/wiki/Special:FilePath/Big_buck_bunny_poster_big.jpg',genre:'Animation',year:2008,description:'A cheerful animated adventure.',video:'https://raw.githubusercontent.com/andreasbotsikas/DemoVideos/master/big_buck_bunny.mp4',download:true},
     {id:2,title:'Elephants Dream',poster:'https://commons.wikimedia.org/wiki/Special:FilePath/ElephantsDreamPoster.jpg',genre:'Sci-Fi',year:2006,description:'A surreal journey through a strange world.',video:'https://raw.githubusercontent.com/andreasbotsikas/DemoVideos/master/elephants_dream.mp4',download:true},
+    {id:4,title:'Spring',officialUrl:'https://studio.blender.org/projects/spring/',genre:'Fantasy',year:2019,description:'A shepherd girl and her dog face ancient spirits. Visit the official film page.',video:'',download:false},
+    {id:5,title:'Cosmos Laundromat',officialUrl:'https://studio.blender.org/projects/cosmos-laundromat/',genre:'Sci-Fi',year:2015,description:'A sheep encounters a strange salesman and the promise of new lives. Visit the official film page.',video:'',download:false},
+    {id:6,title:'Tears of Steel',officialUrl:'https://studio.blender.org/projects/tears-of-steel/',genre:'Sci-Fi',year:2012,description:'A science-fiction short combining live action and visual effects. Visit the official film page.',video:'',download:false},
     {id:3,title:'Sintel',poster:'https://commons.wikimedia.org/wiki/Special:FilePath/Sintel_poster.jpg',genre:'Fantasy',year:2010,description:'An epic animated fantasy adventure.',video:'https://media.w3.org/2010/05/sintel/trailer.mp4',download:true}
   ]}; }
 }

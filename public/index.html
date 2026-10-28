@@ -131,6 +131,11 @@ function renderMovies(list,id){document.getElementById(id).innerHTML=list.length
 function playMovie(id){
  currentMovie=movies.find(m=>m.id===id)||null;
  if(!currentMovie){alert('Movie not found.');return}
+ if(!currentMovie.video && currentMovie.officialUrl){
+   window.open(currentMovie.officialUrl,'_blank','noopener,noreferrer');
+   return;
+ }
+ if(!currentMovie.video){alert('This film is not available to play yet.');return}
  document.getElementById('playingTitle').textContent=currentMovie.title;
  document.getElementById('playingDescription').textContent=currentMovie.description;
  const v=document.getElementById('video');v.src=currentMovie.video;
