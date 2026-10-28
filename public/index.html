@@ -131,20 +131,55 @@ function renderMovies(list,id){document.getElementById(id).innerHTML=list.length
 function playMovie(id){
  currentMovie=movies.find(m=>m.id===id)||null;
  if(!currentMovie){alert('Movie not found.');return}
- if(!currentMovie.video && currentMovie.officialUrl){
-   window.open(currentMovie.officialUrl,'_blank','noopener,noreferrer');
-   return;
- }
- if(!currentMovie.video){alert('This film is not available to play yet.');return}
+
+ const player=document.getElementById('player');
+ const video=document.getElementById('video');
+ let frame=document.getElementById('youtubePlayer');
+
  document.getElementById('playingTitle').textContent=currentMovie.title;
  document.getElementById('playingDescription').textContent=currentMovie.description;
- const v=document.getElementById('video');v.src=currentMovie.video;
- document.getElementById('player').classList.remove('hidden');
- document.getElementById('player').scrollIntoView({behavior:'smooth'});
- v.play().catch(()=>{});
+
+ if(frame){frame.remove();frame=null;}
+ video.pause();
+ video.removeAttribute('src');
+ video.load();
+
+ if(currentMovie.youtubeId){
+   video.style.display='none';
+   frame=document.createElement('iframe');
+   frame.id='youtubePlayer';
+   frame.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(currentMovie.youtubeId)+'?autoplay=1&rel=0';
+   frame.title=currentMovie.title;
+   frame.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+   frame.allowFullscreen=true;
+   frame.style.width='100%';
+   frame.style.aspectRatio='16 / 9';
+   frame.style.border='0';
+   video.insertAdjacentElement('afterend',frame);
+ }else if(currentMovie.video){
+   video.style.display='';
+   video.src=currentMovie.video;
+   video.play().catch(()=>{});
+ }else{
+   alert('This movie is not available to play yet.');
+   return;
+ }
+
+ player.classList.remove('hidden');
+ player.scrollIntoView({behavior:'smooth'});
 }
-function closePlayer(){const v=document.getElementById('video');v.pause();v.removeAttribute('src');v.load();document.getElementById('player').classList.add('hidden')}
-function downloadMovie(){if(currentMovie)location.href='/api/download/'+currentMovie.id}
+
+function closePlayer(){
+ const video=document.getElementById('video');
+ const frame=document.getElementById('youtubePlayer');
+ video.pause();
+ video.removeAttribute('src');
+ video.load();
+ video.style.display='';
+ if(frame)frame.remove();
+ document.getElementById('player').classList.add('hidden');
+}
+
 function showAccount(){document.getElementById('account').classList.toggle('hidden');document.getElementById('account').scrollIntoView({behavior:'smooth'})}
 async function register(){
  try{const d=await api('/api/register',{method:'POST',body:JSON.stringify({username:username.value,password:password.value})});accountMessage.textContent=d.message}
