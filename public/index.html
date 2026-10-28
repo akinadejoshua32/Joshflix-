@@ -13,6 +13,8 @@ header{position:sticky;top:0;z-index:5;background:#111f;backdrop-filter:blur(12p
 button{cursor:pointer;border:0;border-radius:6px;padding:10px 14px;font-weight:bold}
 .red{background:var(--red);color:white}
 .ghost{background:#333;color:white}
+.search-wrap{display:flex;align-items:center;gap:8px;background:#292929;border:1px solid #444;border-radius:7px;padding:0 10px;width:min(45vw,320px)}
+.search-wrap .search{width:100%;min-width:0;border:0;outline:none;background:transparent;padding:12px 0}
 .search{background:#292929;border:1px solid #444;color:white;border-radius:7px;padding:12px;width:min(45vw,320px)}
 .hero{padding:65px 6% 55px;background:linear-gradient(90deg,#000e,#0005),linear-gradient(0deg,#101010,transparent),url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80') center/cover;min-height:310px;display:flex;flex-direction:column;justify-content:center}
 .hero h1{font-size:clamp(34px,7vw,60px);margin:0 0 12px}
@@ -33,13 +35,16 @@ video{width:100%;max-height:60vh;background:#000}
 input{max-width:100%}
 .forminput{display:block;width:100%;padding:12px;margin:10px 0;background:#292929;border:1px solid #444;border-radius:6px;color:white}
 footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
-@media(max-width:450px){header{padding:12px 4%;flex-wrap:wrap}.logo{font-size:23px}.search{order:3;width:100%}.hero{min-height:270px;padding:35px 5%}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.poster{height:145px}}
+@media(max-width:450px){header{padding:12px 4%;flex-wrap:wrap}.logo{font-size:23px}.search-wrap{order:3;width:100%;max-width:100%}.search-wrap .search{width:100%}.hero{min-height:270px;padding:35px 5%}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.poster{height:145px}}
 </style>
 </head>
 <body>
 <header>
 <div class="logo">JOSHFLIX</div>
+<div class="search-wrap">
+<span aria-hidden="true">🔍</span>
 <input id="search" class="search" placeholder="Search movies..." oninput="scheduleMovieSearch()">
+</div>
 <button class="ghost" onclick="showAccount()">👤 Account</button>
 </header>
 
