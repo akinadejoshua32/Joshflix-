@@ -37,6 +37,260 @@ input{max-width:100%}
 .forminput{display:block;width:100%;padding:12px;margin:10px 0;background:#292929;border:1px solid #444;border-radius:6px;color:white}
 footer{text-align:center;color:var(--muted);padding:20px;font-size:12px}
 @media(max-width:450px){header{padding:12px 4%;flex-wrap:wrap}.logo{font-size:23px}.search-wrap{order:3;width:100%;max-width:100%}.search-wrap .search{width:100%}.hero{min-height:270px;padding:35px 5%}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.poster{height:145px}}
+
+/* JOSHFLIX PREMIUM CINEMA UPGRADE */
+:root {
+  --red: #ff1635;
+  --bg: #090a0e;
+  --panel: #15171e;
+  --muted: #a7a9b5;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 50% 0%, #291019 0%, transparent 42%),
+    var(--bg);
+  letter-spacing: .1px;
+}
+
+header {
+  background: rgba(9, 10, 14, .92);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  box-shadow: 0 8px 30px #0005;
+}
+
+.logo {
+  font-size: 29px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 24px #ff163544;
+}
+
+button {
+  transition: transform .2s ease, background .2s ease,
+              box-shadow .2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+.red {
+  background: linear-gradient(135deg, #ff2545, #c90025);
+  box-shadow: 0 5px 18px #ff163526;
+}
+
+.red:hover {
+  box-shadow: 0 7px 24px #ff16354d;
+}
+
+.ghost {
+  background: #242630;
+  border: 1px solid #383a46;
+}
+
+.ghost:hover {
+  background: #343744;
+}
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 390px;
+  padding: 65px 6% 60px;
+  background:
+    linear-gradient(90deg, #08090ef5 0%, #08090ebd 45%, #08090e35 100%),
+    linear-gradient(0deg, var(--bg) 0%, transparent 40%),
+    url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1800&q=85')
+    center 45% / cover;
+  border-bottom: 1px solid #ffffff0c;
+}
+
+.hero h1 {
+  max-width: 700px;
+  font-size: clamp(38px, 7vw, 72px);
+  line-height: 1.04;
+  letter-spacing: -2px;
+  text-shadow: 0 5px 28px #0008;
+}
+
+.hero p {
+  font-size: 16px;
+  max-width: 510px;
+  color: #d0d0d8;
+}
+
+.hero > div:first-child {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 8px 12px;
+  margin-bottom: 17px;
+  border: 1px solid #ff53694d;
+  border-radius: 30px;
+  background: #ff16351c;
+  letter-spacing: 2px;
+  font-size: 11px;
+}
+
+main {
+  max-width: 1500px;
+  margin: auto;
+  padding-top: 30px;
+}
+
+.bar h2 {
+  letter-spacing: -.5px;
+}
+
+.grid {
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 19px;
+  margin-top: 22px;
+}
+
+.movie {
+  position: relative;
+  background: linear-gradient(155deg, #1b1d26, #111218);
+  border: 1px solid #ffffff0d;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px #0002;
+  transition: transform .25s ease, border-color .25s ease,
+              box-shadow .25s ease;
+}
+
+.movie:hover {
+  transform: translateY(-5px);
+  border-color: #ff16355c;
+  box-shadow: 0 15px 32px #0007;
+}
+
+.poster {
+  height: 235px;
+  padding: 0;
+  background: linear-gradient(145deg, #39202b, #171820 70%, #292b36);
+  font-size: 48px;
+}
+
+.poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .35s ease;
+}
+
+.movie:hover .poster img {
+  transform: scale(1.04);
+}
+
+.info {
+  padding: 13px;
+}
+
+.info h3 {
+  font-size: 15px;
+  line-height: 1.4;
+  min-height: 21px;
+}
+
+.info p {
+  color: #b1b3bf;
+}
+
+.player {
+  border: 1px solid #ffffff14;
+  box-shadow: 0 15px 45px #0005;
+}
+
+#video {
+  border-radius: 8px;
+}
+
+.panel {
+  border: 1px solid #ffffff12;
+  box-shadow: 0 12px 35px #0003;
+}
+
+.search-wrap,
+.search {
+  background: #171820;
+  border-color: #353743;
+}
+
+.search-wrap:focus-within {
+  border-color: #ff5369;
+  box-shadow: 0 0 0 3px #ff16351c;
+}
+
+footer {
+  border-top: 1px solid #ffffff0d;
+  margin-top: 30px;
+  padding: 30px 15px;
+}
+
+@media (max-width: 600px) {
+  header {
+    gap: 10px;
+  }
+
+  .logo {
+    font-size: 23px;
+    letter-spacing: 1px;
+  }
+
+  .hero {
+    min-height: 330px;
+    padding: 43px 5%;
+    background-position: 58% center;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 10vw, 50px);
+    letter-spacing: -1.5px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  main {
+    padding: 20px 4% 40px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .poster {
+    height: 190px;
+  }
+
+  .info {
+    padding: 10px;
+  }
+
+  .info h3 {
+    font-size: 14px;
+  }
+
+  .info button {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
